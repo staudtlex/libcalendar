@@ -36,3 +36,5 @@ The primary motivation for writing _libcalendar_ was to take first steps in unde
 - Furthermore, the Islamic and French Revolutionary calendar functions do not work with dates prior to their respective epochs. If provided with such dates, the functions may return invalid results.
 
 - `DaylightSavingsStart` and `DaylightSavingsEnd` use the US rules for determining start and end of DST which are in place since 2007, whereas the corresponding Lisp-functions use the pre-2007 rules.
+
+- For some dates, the Old Hindu solar and lunar calendar functions return results that are off by one day compared to those produced by the (more recent) Lisp-Code in [Reingold/Dershowitz (2018)](https://www.cambridge.org/de/academic/subjects/computer-science/computing-general-interest/calendrical-calculations-ultimate-edition-4th-edition?format=PB&isbn=9781107683167).

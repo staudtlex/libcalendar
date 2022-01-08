@@ -31,18 +31,18 @@ import (
 
 // Gregorian and Julian months
 const (
-	january   float64 = 1
-	february  float64 = 2
-	march     float64 = 3
-	april     float64 = 4
-	may       float64 = 5
-	june      float64 = 6
-	july      float64 = 7
-	august    float64 = 8
-	september float64 = 9
-	october   float64 = 10
-	november  float64 = 11
-	december  float64 = 12
+	january   = 1
+	february  = 2
+	march     = 3
+	april     = 4
+	may       = 5
+	june      = 6
+	july      = 7
+	august    = 8
+	september = 9
+	october   = 10
+	november  = 11
+	december  = 12
 )
 
 // Gregorian date
@@ -211,18 +211,18 @@ func JulianFromAbsolute(date float64) JulianDate {
 
 // Islamic months
 const (
-	muharram    float64 = 1
-	safar       float64 = 2
-	rabi_i      float64 = 3
-	rabi_ii     float64 = 4
-	jumada_i    float64 = 5
-	jumada_ii   float64 = 6
-	rajab       float64 = 7
-	shaBan      float64 = 8
-	ramadan     float64 = 9
-	shawwal     float64 = 10
-	dhuAlQada   float64 = 11
-	dhuAlHijjah float64 = 12
+	muharram    = 1
+	safar       = 2
+	rabi_i      = 3
+	rabi_ii     = 4
+	jumada_i    = 5
+	jumada_ii   = 6
+	rajab       = 7
+	shaBan      = 8
+	ramadan     = 9
+	shawwal     = 10
+	dhuAlQada   = 11
+	dhuAlHijjah = 12
 )
 
 // Islamic date
@@ -285,20 +285,20 @@ func IslamicFromAbsolute(date float64) IslamicDate {
 
 // Hebrew months
 const (
-	nisan        float64 = 1
-	iyyar        float64 = 2
-	sivan        float64 = 3
-	tammuz       float64 = 4
-	av           float64 = 5
-	elul         float64 = 6
-	tishri       float64 = 7
-	heshvan      float64 = 8
-	kislev       float64 = 9
-	teveth       float64 = 10
-	shevat       float64 = 11
-	adar_i_leap  float64 = 12 // only in leap years, otherwise adar_i_leap is skipped
-	adar_ii      float64 = 12
-	adar_ii_leap float64 = 13 // only in leap years, otherwise adar_i_leap is skipped
+	nisan        = 1
+	iyyar        = 2
+	sivan        = 3
+	tammuz       = 4
+	av           = 5
+	elul         = 6
+	tishri       = 7
+	heshvan      = 8
+	kislev       = 9
+	teveth       = 10
+	shevat       = 11
+	adar_i_leap  = 12 // only in leap years, otherwise adar_i_leap is skipped
+	adar_ii      = 12
+	adar_ii_leap = 13 // only in leap years, otherwise adar_i_leap is skipped
 )
 
 // Hebrew date
@@ -433,48 +433,48 @@ func HebrewFromAbsolute(date float64) HebrewDate {
 
 // Mayan haab months
 const (
-	pop    float64 = 1
-	uo     float64 = 2
-	zip    float64 = 3
-	zotz   float64 = 4
-	tzec   float64 = 5
-	xul    float64 = 6
-	yaxkin float64 = 7
-	mol    float64 = 8
-	chen   float64 = 9
-	yax    float64 = 10
-	zac    float64 = 11
-	ceh    float64 = 12
-	mac    float64 = 13
-	kankin float64 = 14
-	muan   float64 = 15
-	pax    float64 = 16
-	kayab  float64 = 17
-	cumku  float64 = 18
+	pop    = 1
+	uo     = 2
+	zip    = 3
+	zotz   = 4
+	tzec   = 5
+	xul    = 6
+	yaxkin = 7
+	mol    = 8
+	chen   = 9
+	yax    = 10
+	zac    = 11
+	ceh    = 12
+	mac    = 13
+	kankin = 14
+	muan   = 15
+	pax    = 16
+	kayab  = 17
+	cumku  = 18
 )
 
 // Mayan tzolkin names
 const (
-	imix    float64 = 1
-	ik      float64 = 2
-	akbal   float64 = 3
-	kan     float64 = 4
-	chiccan float64 = 5
-	cimi    float64 = 6
-	manik   float64 = 7
-	lamat   float64 = 8
-	muluc   float64 = 9
-	oc      float64 = 10
-	chuen   float64 = 11
-	eb      float64 = 12
-	ben     float64 = 13
-	ix      float64 = 14
-	men     float64 = 15
-	cib     float64 = 16
-	caban   float64 = 17
-	etznab  float64 = 18
-	cauac   float64 = 19
-	ahau    float64 = 20
+	imix    = 1
+	ik      = 2
+	akbal   = 3
+	kan     = 4
+	chiccan = 5
+	cimi    = 6
+	manik   = 7
+	lamat   = 8
+	muluc   = 9
+	oc      = 10
+	chuen   = 11
+	eb      = 12
+	ben     = 13
+	ix      = 14
+	men     = 15
+	cib     = 16
+	caban   = 17
+	etznab  = 18
+	cauac   = 19
+	ahau    = 20
 )
 
 // Mayan long count date type
@@ -594,18 +594,18 @@ func MayanHaabTzolkinOnOrBefore(haab MayanHaabDate, tzolkin MayanTzolkinDate, d 
 
 // French Revolutionary calendar months
 const (
-	vendémiaire float64 = 1
-	brumaire    float64 = 2
-	frimaire    float64 = 3
-	nivôse      float64 = 4
-	pluviôse    float64 = 5
-	ventôse     float64 = 6
-	germinal    float64 = 7
-	floréal     float64 = 8
-	prairial    float64 = 9
-	messidor    float64 = 10
-	thermidor   float64 = 11
-	fructidor   float64 = 12
+	vendémiaire = 1
+	brumaire    = 2
+	frimaire    = 3
+	nivôse      = 4
+	pluviôse    = 5
+	ventôse     = 6
+	germinal    = 7
+	floréal     = 8
+	prairial    = 9
+	messidor    = 10
+	thermidor   = 11
+	fructidor   = 12
 )
 
 // French date type
@@ -700,37 +700,36 @@ type OldHinduLunarDate struct {
 /*
 // Old Hindu solar months
 const (
-	mesha     float64 = 1
-	vrshabha  float64 = 2
-	mithuna   float64 = 3
-	karka     float64 = 4
-	simha     float64 = 5
-	kanya     float64 = 6
-	tula      float64 = 7
-	vrischika float64 = 8
-	dhanus    float64 = 9
-	makara    float64 = 10
-	kumbha    float64 = 11
-	mina      float64 = 12
+	mesha     = 1
+	vrshabha  = 2
+	mithuna   = 3
+	karka     = 4
+	simha     = 5
+	kanya     = 6
+	tula      = 7
+	vrischika = 8
+	dhanus    = 9
+	makara    = 10
+	kumbha    = 11
+	mina      = 12
 )
 
 // Old Hindu lunar months
 const (
-	chaitra    float64 = 1
-	vaisakha   float64 = 2
-	jyaishtha  float64 = 3
-	ashadha    float64 = 4
-	sravana    float64 = 5
-	bhadrapada float64 = 6
-	asvina     float64 = 7
-	karttika   float64 = 8
-	margasira  float64 = 9
-	pausha     float64 = 10
-	magha      float64 = 11
-	phalguna   float64 = 12
+	chaitra    = 1
+	vaisakha   = 2
+	jyaishtha  = 3
+	ashadha    = 4
+	sravana    = 5
+	bhadrapada = 6
+	asvina     = 7
+	karttika   = 8
+	margasira  = 9
+	pausha     = 10
+	magha      = 11
+	phalguna   = 12
 )
 */
-
 var SolarSiderealYear = Add(Ratio(365), Ratio(279457, 1080000))
 var SolarMonth = Div(SolarSiderealYear, Ratio(12))
 var LunarSiderealMonth = Add(Ratio(27), Ratio(4644439, 14438334))

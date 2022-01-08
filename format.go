@@ -162,7 +162,7 @@ var frenchMonths = map[float64]string{
 	10: "Messidor",
 	11: "Thermidor",
 	12: "Fructidor",
-	13: "jour complémentaire",
+	13: "Sansculottides",
 }
 
 func (d FrenchDate) String() string {
