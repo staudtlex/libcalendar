@@ -13,15 +13,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-// The following Go code is translated from the Lisp code discussed in:
-// - Dershowitz, Nachum, and Edward Reingold. 1990. "Calendrical
-//   Calculations", Software - Practice and Experience, 20 (9), 899-928.
-//   https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.17.4274
-// - Reingold, Edward, Nachum Dershowitz, and Stewart Clamen. 1993.
-//   "Calendrical Calculations, II: Three Historical Calendars",
-//   Software - Practice & Experience, 23 (4), 383-404.
-//   https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.9215
-
+// Package libcalendar implements functions to compute and convert dates
+// from various calendars. These are the
+// Gregorian, ISO, Julian, Islamic, Hebrew, Mayan (long count, haab, tzolkin),
+// French Revolutionary, and Old Hindu (solar, lunar) calendars.
+//
+// The calendrical algorithms are a translation of the Lisp code discussed in:
+//
+// Dershowitz, Nachum, and Edward Reingold. 1990. "Calendrical Calculations",
+// Software - Practice and Experience, 20 (9), 899-928.
+// https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.17.4274
+//
+// Reingold, Edward, Nachum Dershowitz, and Stewart Clamen. 1993. "Calendrical
+// Calculations, II: Three Historical Calendars", Software - Practice &
+// Experience, 23 (4), 383-404.
+// https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.9215
 package libcalendar
 
 import (
