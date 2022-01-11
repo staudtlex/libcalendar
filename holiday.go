@@ -15,10 +15,12 @@
 
 // The following Go code is translated from the Lisp code discussed in:
 // - Dershowitz, Nachum, and Edward Reingold. 1990. "Calendrical
-//   Calculations", Software---Practice and Experience, 20 (9), 899--928.
+//   Calculations", Software - Practice and Experience, 20 (9), 899-928.
+//   https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.17.4274
 // - Reingold, Edward, Nachum Dershowitz, and Stewart Clamen. 1993.
 //   "Calendrical Calculations, II: Three Historical Calendars",
-//   Software---Practice & Experience, 23 (4), 383--404.
+//   Software - Practice & Experience, 23 (4), 383-404.
+//   https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.9215
 
 package libcalendar
 

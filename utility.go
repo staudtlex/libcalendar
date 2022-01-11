@@ -19,6 +19,25 @@ import "fmt"
 
 // FromAbsolute converts a given absolute (fixed) date to the date
 // representation specified in `calendar`.
+//
+// The list of supported calendar strings is:
+//  - gregorian
+//  - iso
+//  - julian
+//  - islamic
+//  - hebrew
+//  - mayanLongCount
+//  - mayanHaab
+//  - mayanTzolkin
+//  - french
+//  - oldHinduSolar
+//  - oldHinduLunar
+//
+// For more information about these calendars, see:
+//
+// Dershowitz, Nachum, and Edward Reingold. 1990. "Calendrical Calculations", Software - Practice and Experience, 20 (9), 899-928. https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.17.4274.
+//
+// Reingold, Edward, Nachum Dershowitz, and Stewart Clamen. 1993. "Calendrical Calculations, II: Three Historical Calendars", Software - Practice & Experience, 23 (4), 383-404. https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.9215.
 func FromAbsolute(date float64, calendar string) string {
 	switch calendar {
 	case "gregorian":

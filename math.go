@@ -15,11 +15,14 @@
 
 // The Go code for the functions "amod" and "sum" is translated from the
 // Lisp code discussed in:
+// The following Go code is translated from the Lisp code discussed in:
 // - Dershowitz, Nachum, and Edward Reingold. 1990. "Calendrical
-//   Calculations", Software---Practice and Experience, 20 (9), 899--928.
+//   Calculations", Software - Practice and Experience, 20 (9), 899-928.
+//   https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.17.4274
 // - Reingold, Edward, Nachum Dershowitz, and Stewart Clamen. 1993.
 //   "Calendrical Calculations, II: Three Historical Calendars",
-//   Software---Practice & Experience, 23 (4), 383--404.
+//   Software - Practice & Experience, 23 (4), 383-404.
+//   https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.9215
 
 package libcalendar
 
@@ -64,14 +67,14 @@ func member(x float64, s []float64) bool {
 
 // Convenience functions for working with *big.Rat
 
-// Ratio creates a rational number from its arguemnts x. If no argument x
-// is passed, `Ratio` returns a *big.Rat whose value is set to zero. Called with
-// a single argument, `Ratio` returns a *big.Rat whose value is set to the
-// argument's value. Otherwise, `Ratio` returns a *big.Rat with its numerator set
+// ratio creates a rational number from its arguemnts x. If no argument x
+// is passed, `ratio` returns a *big.Rat whose value is set to zero. Called with
+// a single argument, `ratio` returns a *big.Rat whose value is set to the
+// argument's value. Otherwise, `ratio` returns a *big.Rat with its numerator set
 // to the first argument's value, and the denominator set to the second. Any
-// additional argument is ignored. If the second argument's value == 0, Ratio
+// additional argument is ignored. If the second argument's value == 0, ratio
 // panics.
-func Ratio(x ...float64) *big.Rat {
+func ratio(x ...float64) *big.Rat {
 	switch len(x) {
 	case 0:
 		return (&big.Rat{}).SetInt64(0)
@@ -82,8 +85,8 @@ func Ratio(x ...float64) *big.Rat {
 	}
 }
 
-// Add computes the sum of the rational numbers specified in x.
-func Add(x ...*big.Rat) *big.Rat {
+// add computes the sum of the rational numbers specified in x.
+func add(x ...*big.Rat) *big.Rat {
 	sum := &big.Rat{}
 	for i := range x {
 		sum.Add(sum, x[i])
@@ -91,13 +94,13 @@ func Add(x ...*big.Rat) *big.Rat {
 	return sum
 }
 
-// Sub computes the difference of the rational numbers x and y.
-func Sub(x, y *big.Rat) *big.Rat {
+// sub computes the difference of the rational numbers x and y.
+func sub(x, y *big.Rat) *big.Rat {
 	return (&big.Rat{}).Sub(x, y)
 }
 
-// Mult returns the product of the rational numbers specified in x.
-func Mult(x ...*big.Rat) *big.Rat {
+// mult returns the product of the rational numbers specified in x.
+func mult(x ...*big.Rat) *big.Rat {
 	prod := (&big.Rat{}).SetInt64(1)
 	for i := range x {
 		prod.Mul(prod, x[i])
@@ -105,35 +108,35 @@ func Mult(x ...*big.Rat) *big.Rat {
 	return prod
 }
 
-// Div returns the quotient of two rational numbers x and y.
-func Div(x, y *big.Rat) *big.Rat {
+// div returns the quotient of two rational numbers x and y.
+func div(x, y *big.Rat) *big.Rat {
 	return (&big.Rat{}).Quo(x, y)
 }
 
-// Quotient computes the Quotient of two rational numbers, truncated
+// quotient computes the quotient of two rational numbers, truncated
 // towards zero.
-func Quotient(x, y *big.Rat) float64 {
-	result, _ := Div(x, y).Float64()
+func quotient(x, y *big.Rat) float64 {
+	result, _ := div(x, y).Float64()
 	return math.Floor(result)
 }
 
-// Floorf returns the greatest integer less than or equal to x. Note that the
+// floorf returns the greatest integer less than or equal to x. Note that the
 // returned value is a float64.
-func Floorf(x *big.Rat) float64 {
+func floorf(x *big.Rat) float64 {
 	val, _ := x.Float64()
 	return math.Floor(val)
 }
 
 // floorf returns the greatest integer less than or equal to x.
-func Floor(x *big.Rat) *big.Rat {
-	return Ratio(Floorf(x))
+func floor(x *big.Rat) *big.Rat {
+	return ratio(floorf(x))
 }
 
-// Modr computes the positive (rational) remainder of a mod b.
-func Modr(a *big.Rat, b *big.Rat) *big.Rat {
-	r := Sub(a, Mult(b, Floor(Div(a, b))))
-	if r.Cmp(Ratio(0)) < 0 {
-		return Add(r, b)
+// modr computes the positive (rational) remainder of a mod b.
+func modr(a *big.Rat, b *big.Rat) *big.Rat {
+	r := sub(a, mult(b, floor(div(a, b))))
+	if r.Cmp(ratio(0)) < 0 {
+		return add(r, b)
 	} else {
 		return r
 	}
