@@ -8,19 +8,15 @@ _libcalendar_ is a translation into Go of the Lisp code described and presented 
 
 _libcalendar_ allows the computation of and conversion between dates from 11 calendars: Gregorian, ISO, Julian, Islamic, Hebrew, Mayan (long count, haab, tzolkin), French Revolutionary, and Old Hindu (solar, lunar).
 
-## Installation
-
-If you have a toy project where you want to use _libcalendar_, clone this repository and add a [replace directive](https://go.dev/ref/mod#go-mod-file-replace) to your project's `go.mod` file with the appropriate path to the location where you cloned _libcalendar_, e.g.
-
+## Installing
+Install the latest version of _libcalendar_ via `go get`
 ```go
-module toyProjectName
+go get staudtlex.de/libcalendar
+```
 
-go 1.17
-
-replace staudtlex.de/libcalendar => /custom/path/to/libcalendar
-
-// The `require` statement will be automatically inserted when running `go mod tidy`. No need to add it manually
-require staudtlex.de/libcalendar v0.0.0.-...
+Import _libcalendar_ in your application
+```go
+import staudtlex.de/libcalendar
 ```
 
 ## Examples
