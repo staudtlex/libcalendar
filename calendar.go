@@ -28,7 +28,7 @@
 // Calculations, II: Three Historical Calendars", Software - Practice &
 // Experience, 23 (4), 383-404.
 // https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.9215
-package libcalendar
+package libcalendar // import "staudtlex.de/libcalendar"
 
 import (
 	"math"
