@@ -74,15 +74,8 @@ func member(x float64, s []float64) bool {
 // to the first argument's value, and the denominator set to the second. Any
 // additional argument is ignored. If the second argument's value == 0, ratio
 // panics.
-func ratio(x ...float64) *big.Rat {
-	switch len(x) {
-	case 0:
-		return (&big.Rat{}).SetInt64(0)
-	case 1:
-		return (&big.Rat{}).SetInt64(int64(x[0]))
-	default:
-		return big.NewRat(int64(x[0]), int64(x[1]))
-	}
+func ratio(x float64, y float64) *big.Rat {
+	return big.NewRat(int64(x), int64(y))
 }
 
 // add computes the sum of the rational numbers specified in x.
@@ -129,13 +122,13 @@ func floorf(x *big.Rat) float64 {
 
 // floorf returns the greatest integer less than or equal to x.
 func floor(x *big.Rat) *big.Rat {
-	return ratio(floorf(x))
+	return big.NewRat(int64(floorf(x)), 1)
 }
 
 // modr computes the positive (rational) remainder of a mod b.
 func modr(a *big.Rat, b *big.Rat) *big.Rat {
 	r := sub(a, mult(b, floor(div(a, b))))
-	if r.Cmp(ratio(0)) < 0 {
+	if r.Cmp(big.NewRat(0, 1)) < 0 {
 		return add(r, b)
 	} else {
 		return r

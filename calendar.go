@@ -738,28 +738,28 @@ const (
 	phalguna   = 12
 )
 */
-var SolarSiderealYear = add(ratio(365), ratio(279457, 1080000))
-var SolarMonth = div(SolarSiderealYear, ratio(12))
-var LunarSiderealMonth = add(ratio(27), ratio(4644439, 14438334))
-var LunarSynodicMonth = add(ratio(29), ratio(7087771, 13358334))
+var SolarSiderealYear = add(big.NewRat(365, 1), big.NewRat(279457, 1080000))
+var SolarMonth = div(SolarSiderealYear, big.NewRat(12, 1))
+var LunarSiderealMonth = add(big.NewRat(27, 1), big.NewRat(4644439, 14438334))
+var LunarSynodicMonth = add(big.NewRat(29, 1), big.NewRat(7087771, 13358334))
 
 // SolarLongitude returns the position of the sun (in degrees) for a
 // given moment (day and fraction of a day).
 func SolarLongitude(t *big.Rat) (degrees *big.Rat) {
-	return mult(modr(div(t, SolarSiderealYear), ratio(1)), ratio(360))
+	return mult(modr(div(t, SolarSiderealYear), big.NewRat(1, 1)), big.NewRat(360, 1))
 }
 
 // Zodiac returns the zodiacal sign for a given moment (day and fraction
 // of day).
 func Zodiac(t *big.Rat) (zodiac float64) {
-	zodiac = quotient(SolarLongitude(t), ratio(30))
+	zodiac = quotient(SolarLongitude(t), big.NewRat(30, 1))
 	return zodiac + 1
 }
 
 // OldHinduSolarFromAbsolute computes the Old Hindu solar date corresponding
 // to a given absolute (fixed) date.
 func OldHinduSolarFromAbsolute(date float64) OldHinduSolarDate {
-	hdate := add(ratio(date), ratio(1132959), ratio(1, 4))
+	hdate := add(big.NewRat(int64(date), 1), big.NewRat(1132959, 1), big.NewRat(1, 4))
 	year := quotient(hdate, SolarSiderealYear)
 	month := Zodiac(hdate)
 	day := floorf(modr(hdate, SolarMonth)) + 1
@@ -769,23 +769,23 @@ func OldHinduSolarFromAbsolute(date float64) OldHinduSolarDate {
 // AbsoluteFromOldHinduSolar returns the absolute (fixed) date from a given
 // Old Hindu solar date.
 func AbsoluteFromOldHinduSolar(d OldHinduSolarDate) (date float64) {
-	year := ratio(d.Year)
-	month := ratio(d.Month)
-	day := ratio(d.Day)
-	one := ratio(1)
+	year := big.NewRat(int64(d.Year), 1)
+	month := big.NewRat(int64(d.Month), 1)
+	day := big.NewRat(int64(d.Day), 1)
+	one := big.NewRat(1, 1)
 	result, _ := add(
 		mult(year, SolarSiderealYear),
 		mult(sub(month, one), SolarMonth),
 		day,
-		ratio(-1, 4),
-		ratio(-1132959)).Float64()
+		big.NewRat(-1, 4),
+		big.NewRat(-1132959, 1)).Float64()
 	return math.Floor(result)
 }
 
 // LunarLongitude returns the sidereal longitude of the moon (in degrees) at
 // a given moment (date and fraction of a day).
 func LunarLongitude(t *big.Rat) (degrees *big.Rat) {
-	return mult(modr(div(t, LunarSiderealMonth), ratio(1)), ratio(360))
+	return mult(modr(div(t, LunarSiderealMonth), big.NewRat(1, 1)), big.NewRat(360, 1))
 }
 
 // LunarPhase computes the lunar phase of the moon for a given moment (date
@@ -794,8 +794,8 @@ func LunarPhase(t *big.Rat) (phase float64) {
 	return 1 + quotient(
 		modr(
 			sub(LunarLongitude(t), SolarLongitude(t)),
-			ratio(360)),
-		ratio(12))
+			big.NewRat(360, 1)),
+		big.NewRat(12, 1))
 }
 
 // NewMoon determines the time of the most recent new moon for a given moment
@@ -807,8 +807,8 @@ func NewMoon(t *big.Rat) *big.Rat {
 // OldHinduLunarFromAbsolute returnsthe Old Hindu lunar date corresponding to
 // a given absolute (fixed) date.
 func OldHinduLunarFromAbsolute(date float64) OldHinduLunarDate {
-	hdate := ratio(date + 1132959)
-	sunrise := add(hdate, ratio(1, 4))
+	hdate := big.NewRat(int64(date+1132959), 1)
+	sunrise := add(hdate, big.NewRat(1, 4))
 	lastNewMoon := NewMoon(sunrise)
 	nextNewMoon := add(lastNewMoon, LunarSynodicMonth)
 	month := amod(Zodiac(lastNewMoon)+1, 12)
@@ -818,7 +818,7 @@ func OldHinduLunarFromAbsolute(date float64) OldHinduLunarDate {
 	if leapMonth {
 		nextMonth = add(nextMonth, LunarSynodicMonth)
 	} else {
-		nextMonth = add(nextMonth, ratio(0))
+		nextMonth = add(nextMonth, big.NewRat(0, 1))
 	}
 	year := quotient(nextMonth, SolarSiderealYear)
 	return OldHinduLunarDate{year, month, leapMonth, day}
@@ -849,8 +849,8 @@ func OldHinduLunarPrecedes(d1, d2 OldHinduLunarDate) bool {
 func AbsoluteFromOldHinduLunar(d OldHinduLunarDate) (date float64) {
 	years := d.Year
 	months := d.Month - 2
-	approx := floorf(mult(ratio(years), SolarSiderealYear)) +
-		floorf(mult(ratio(months), LunarSynodicMonth)) +
+	approx := floorf(mult(big.NewRat(int64(years), 1), SolarSiderealYear)) +
+		floorf(mult(big.NewRat(int64(months), 1), LunarSynodicMonth)) +
 		(-1132959)
 	try := approx + sum(
 		func(float64) float64 { return 1 },
