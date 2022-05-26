@@ -37,6 +37,10 @@ func (d GregorianDate) String() string {
 	return fmt.Sprintf("%v %v %v", d.Day, gregorianMonths[d.Month], d.Year)
 }
 
+func (d JulianDate) String() string {
+	return fmt.Sprintf("%v %v %v", d.Day, gregorianMonths[d.Month], d.Year)
+}
+
 // ISO calendar
 func (d IsoDate) String() string {
 	return fmt.Sprintf("%v-W%v-%v", d.Year, fmt.Sprintf("%02d", int(d.Week)), d.Day)

@@ -75,7 +75,7 @@ func LastDayOfGregorianMonth(month float64, year float64) (day float64) {
 
 // AbsoluteFromGregorian computes the absolute (fixed) date from a
 // Gregorian date.
-func AbsoluteFromGregorian(d GregorianDate) (date float64) {
+func AbsoluteFromGregorian(d GregorianDate) (absoluteDate float64) {
 	year := d.Year
 	month := d.Month
 	day := d.Day
@@ -91,9 +91,9 @@ func AbsoluteFromGregorian(d GregorianDate) (date float64) {
 
 // GregorianFromAbsolute computes the Gregorian date corresponding to a
 // given absolute date.
-func GregorianFromAbsolute(date float64) GregorianDate {
+func GregorianFromAbsolute(absoluteDate float64) GregorianDate {
 	// compute year
-	d_0 := date - 1
+	d_0 := absoluteDate - 1
 	n_400 := math.Floor(d_0 / 146097)
 	d_1 := mod(d_0, 146097)
 	n_100 := math.Floor(d_1 / 36524)
@@ -112,11 +112,11 @@ func GregorianFromAbsolute(date float64) GregorianDate {
 	f := func(float64) float64 { return 1 }
 	p := func(m float64) bool {
 		d := GregorianDate{year, m, LastDayOfGregorianMonth(m, year)}
-		return date > AbsoluteFromGregorian(d)
+		return absoluteDate > AbsoluteFromGregorian(d)
 	}
 	month := sum(f, 1, p) + 1
 	// compute day
-	day := date - (AbsoluteFromGregorian(GregorianDate{year, month, 1}) - 1)
+	day := absoluteDate - (AbsoluteFromGregorian(GregorianDate{year, month, 1}) - 1)
 	// return date
 	return GregorianDate{year, month, day}
 }
@@ -132,12 +132,12 @@ type IsoDate struct {
 
 // KDayOnOrBefore computes the absolute date of a given week day in the
 // seven-day interval ending on date.
-func KDayOnOrBefore(date float64, k float64) float64 {
-	return date - mod(date-k, 7)
+func KDayOnOrBefore(absoluteDate float64, k float64) float64 {
+	return absoluteDate - mod(absoluteDate-k, 7)
 }
 
 // AbsoluteFromIso computes the absolute (fixed) date from an ISO date.
-func AbsoluteFromIso(d IsoDate) (date float64) {
+func AbsoluteFromIso(d IsoDate) (absoluteDate float64) {
 	year := d.Year
 	week := d.Week
 	day := d.Day
@@ -149,22 +149,22 @@ func AbsoluteFromIso(d IsoDate) (date float64) {
 
 // IsoFromAbsolute computes the IsoDate corresponding to a given absolute
 // (fixed) date.
-func IsoFromAbsolute(date float64) IsoDate {
-	approx := GregorianFromAbsolute(date - 3).Year
+func IsoFromAbsolute(absoluteDate float64) IsoDate {
+	approx := GregorianFromAbsolute(absoluteDate - 3).Year
 	year := 0.0
-	if date >= AbsoluteFromIso(IsoDate{approx + 1, 1, 1}) {
+	if absoluteDate >= AbsoluteFromIso(IsoDate{approx + 1, 1, 1}) {
 		year = approx + 1
 	} else {
 		year = approx
 	}
 	week := 1 + math.Floor(
-		(date-AbsoluteFromIso(IsoDate{year, 1, 1}))/
+		(absoluteDate-AbsoluteFromIso(IsoDate{year, 1, 1}))/
 			7)
 	day := 0.0
-	if mod(date, 7) == 0 {
+	if mod(absoluteDate, 7) == 0 {
 		day = 7
 	} else {
-		day = mod(date, 7)
+		day = mod(absoluteDate, 7)
 	}
 	return IsoDate{year, week, day}
 }
@@ -183,11 +183,11 @@ func LastDayOfJulianMonth(month float64, year float64) (day float64) {
 }
 
 // Julian date
-type JulianDate = GregorianDate
+type JulianDate GregorianDate
 
 // AbsoluteFromJulian computes the absolute (fixed) date corresponding to a
 // given Julian date.
-func AbsoluteFromJulian(d JulianDate) (date float64) {
+func AbsoluteFromJulian(d JulianDate) (absoluteDate float64) {
 	year := d.Year
 	month := d.Month
 	day := d.Day
@@ -200,18 +200,18 @@ func AbsoluteFromJulian(d JulianDate) (date float64) {
 		2
 }
 
-func JulianFromAbsolute(date float64) JulianDate {
-	approx := math.Floor((date + 2) / 366)
+func JulianFromAbsolute(absoluteDate float64) JulianDate {
+	approx := math.Floor((absoluteDate + 2) / 366)
 	f := func(float64) float64 { return 1 }
 	p := func(y float64) bool {
-		return date >= AbsoluteFromJulian(JulianDate{y + 1, january, 1})
+		return absoluteDate >= AbsoluteFromJulian(JulianDate{y + 1, january, 1})
 	}
 	year := approx + sum(f, approx, p)
 	month := 1 + sum(f, 1, func(m float64) bool {
-		return date > AbsoluteFromJulian(
+		return absoluteDate > AbsoluteFromJulian(
 			JulianDate{year, m, LastDayOfJulianMonth(m, year)})
 	})
-	day := date - (AbsoluteFromJulian(JulianDate{year, month, 1}) - 1)
+	day := absoluteDate - (AbsoluteFromJulian(JulianDate{year, month, 1}) - 1)
 	return JulianDate{year, month, day}
 }
 
@@ -257,7 +257,7 @@ func LastDayOfIslamicMonth(month float64, year float64) (day float64) {
 
 // AbsoluteFromIslamic computes the absolute date corresponding to a given
 // Islamic date.
-func AbsoluteFromIslamic(d IslamicDate) (date float64) {
+func AbsoluteFromIslamic(d IslamicDate) (absoluteDate float64) {
 	year := d.Year
 	month := d.Month
 	day := d.Day
@@ -271,21 +271,21 @@ func AbsoluteFromIslamic(d IslamicDate) (date float64) {
 
 // IslamicFromAbsolute computes the Islamic date corresponding to a given
 // absolute date.
-func IslamicFromAbsolute(date float64) IslamicDate {
-	if date <= 227014 {
+func IslamicFromAbsolute(absoluteDate float64) IslamicDate {
+	if absoluteDate <= 227014 {
 		return IslamicDate{0, 0, 0}
 	}
-	approx := math.Floor((date - 227014) / 355)
+	approx := math.Floor((absoluteDate - 227014) / 355)
 	f := func(float64) float64 { return 1 }
 	p := func(y float64) bool {
-		return date >= AbsoluteFromIslamic(IslamicDate{y + 1, muharram, 1})
+		return absoluteDate >= AbsoluteFromIslamic(IslamicDate{y + 1, muharram, 1})
 	}
 	year := approx + sum(f, approx, p)
 	month := 1 + sum(f, 1, func(m float64) bool {
-		return date > AbsoluteFromIslamic(
+		return absoluteDate > AbsoluteFromIslamic(
 			IslamicDate{year, m, LastDayOfIslamicMonth(m, year)})
 	})
-	day := date - (AbsoluteFromIslamic(IslamicDate{year, month, 1}) - 1)
+	day := absoluteDate - (AbsoluteFromIslamic(IslamicDate{year, month, 1}) - 1)
 	return IslamicDate{year, month, day}
 }
 
@@ -397,7 +397,7 @@ func ShortKislev(year float64) bool {
 
 // AbsoluteFromHebrew computes the absolute (fixed) date from a given
 // Hebrew date.
-func AbsoluteFromHebrew(d HebrewDate) (date float64) {
+func AbsoluteFromHebrew(d HebrewDate) (absoluteDate float64) {
 	year := d.Year
 	month := d.Month
 	day := d.Day
@@ -418,22 +418,22 @@ func AbsoluteFromHebrew(d HebrewDate) (date float64) {
 
 // HebrewFromAbsolute computes the Hebrew date corresponding to a given
 // absolute (fixed) date
-func HebrewFromAbsolute(date float64) HebrewDate {
-	approx := math.Floor((date + 1373429) / 366)
+func HebrewFromAbsolute(absoluteDate float64) HebrewDate {
+	approx := math.Floor((absoluteDate + 1373429) / 366)
 	f := func(float64) float64 { return 1 }
 	year := approx + sum(f, approx, func(y float64) bool {
-		return date >= AbsoluteFromHebrew(HebrewDate{y + 1, 7, 1})
+		return absoluteDate >= AbsoluteFromHebrew(HebrewDate{y + 1, 7, 1})
 	})
 	start := 0.0
-	if (date < AbsoluteFromHebrew(HebrewDate{year, 1, 1})) {
+	if (absoluteDate < AbsoluteFromHebrew(HebrewDate{year, 1, 1})) {
 		start = 7
 	} else {
 		start = 1
 	}
 	month := start + sum(f, start, func(m float64) bool {
-		return date > AbsoluteFromHebrew(HebrewDate{year, m, LastDayOfHebrewMonth(m, year)})
+		return absoluteDate > AbsoluteFromHebrew(HebrewDate{year, m, LastDayOfHebrewMonth(m, year)})
 	})
-	day := date - (AbsoluteFromHebrew(HebrewDate{year, month, 1}) - 1)
+	day := absoluteDate - (AbsoluteFromHebrew(HebrewDate{year, month, 1}) - 1)
 	return HebrewDate{year, month, day}
 }
 
@@ -527,8 +527,8 @@ func AbsoluteFromMayanLongCount(d MayanLongCount) (date float64) {
 
 // MayanLongCountFromAbsolute computes the Mayan long count corresponding to
 // the given absolute date.
-func MayanLongCountFromAbsolute(date float64) MayanLongCount {
-	longCount := date + MayanDaysBeforeAbsoluteZero
+func MayanLongCountFromAbsolute(absoluteDate float64) MayanLongCount {
+	longCount := absoluteDate + MayanDaysBeforeAbsoluteZero
 	baktun := math.Floor(longCount / 144000)
 	dayOfBaktun := mod(longCount, 144000)
 	katun := math.Floor(dayOfBaktun / 7200)
@@ -545,8 +545,8 @@ var MayanHaabAtEpoch MayanHaabDate = MayanHaabDate{8, cumku}
 
 // MayanHaabFromAbsolute returns the Mayan haab date corresponding to a given
 // absolute (fixed) date.
-func MayanHaabFromAbsolute(date float64) MayanHaabDate {
-	longCount := date + MayanDaysBeforeAbsoluteZero
+func MayanHaabFromAbsolute(absoluteDate float64) MayanHaabDate {
+	longCount := absoluteDate + MayanDaysBeforeAbsoluteZero
 	dayOfHaab := mod(longCount+MayanHaabAtEpoch.Day+(20*(MayanHaabAtEpoch.Month-1)), 365)
 	day := mod(dayOfHaab, 20)
 	month := math.Floor(dayOfHaab/20) + 1
@@ -569,8 +569,8 @@ var MayanTzolkinAtEpoch MayanTzolkinDate = MayanTzolkinDate{4, ahau}
 
 // MayanTzolkinFromAbsolute returns a Mayan tzolkin date corresponding to
 // a given absolute (fixed) date.
-func MayanTzolkinFromAbsolute(date float64) MayanTzolkinDate {
-	longCount := date + MayanDaysBeforeAbsoluteZero
+func MayanTzolkinFromAbsolute(absoluteDate float64) MayanTzolkinDate {
+	longCount := absoluteDate + MayanDaysBeforeAbsoluteZero
 	number := amod(longCount+MayanTzolkinAtEpoch.Number, 13)
 	name := amod(longCount+MayanTzolkinAtEpoch.Name, 20)
 	return MayanTzolkinDate{number, name}
@@ -587,7 +587,7 @@ func MayanTzolkinDifference(d1, d2 MayanTzolkinDate) (days float64) {
 // MayanHaabTzolkinOnOrBefore returns the absolute date of the latest date on
 // or before a given haab date and a given tzolkin date. Returns NaN when no
 // such combination is found.
-func MayanHaabTzolkinOnOrBefore(haab MayanHaabDate, tzolkin MayanTzolkinDate, d float64) (date float64) {
+func MayanHaabTzolkinOnOrBefore(haab MayanHaabDate, tzolkin MayanTzolkinDate, d float64) (absoluteDate float64) {
 	haabDifference := MayanHaabDifference(MayanHaabFromAbsolute(0), haab)
 	tzolkinDifference := MayanTzolkinDifference(MayanTzolkinFromAbsolute(0), tzolkin)
 	difference := tzolkinDifference - haabDifference
@@ -650,7 +650,7 @@ func FrenchLeapYear(year float64) bool {
 
 // AbsoluteFromFrench returns the absolute (fixed) date from a given French
 // Revolutionary date.
-func AbsoluteFromFrench(d FrenchDate) (date float64) {
+func AbsoluteFromFrench(d FrenchDate) (absoluteDate float64) {
 	year := d.Year
 	month := d.Month
 	day := d.Day
@@ -670,21 +670,21 @@ func AbsoluteFromFrench(d FrenchDate) (date float64) {
 
 // FrenchFromAbsolute returns the French Revolutionary date corresponding to a
 // given absolute (fixed) date.
-func FrenchFromAbsolute(date float64) FrenchDate {
-	if date < 654415 {
+func FrenchFromAbsolute(absoluteDate float64) FrenchDate {
+	if absoluteDate < 654415 {
 		return FrenchDate{0, 0, 0}
 	}
-	approx := math.Floor((date - 654414) / 366)
+	approx := math.Floor((absoluteDate - 654414) / 366)
 	f := func(float64) float64 { return 1 }
 	year := approx + sum(f, approx,
 		func(y float64) bool {
-			return date >= AbsoluteFromFrench(FrenchDate{y + 1, vendémiaire, 1})
+			return absoluteDate >= AbsoluteFromFrench(FrenchDate{y + 1, vendémiaire, 1})
 		})
 	month := 1 + sum(f, 1,
 		func(m float64) bool {
-			return date > AbsoluteFromFrench(FrenchDate{year, m, FrenchLastDayOfMonth(m, year)})
+			return absoluteDate > AbsoluteFromFrench(FrenchDate{year, m, FrenchLastDayOfMonth(m, year)})
 		})
-	day := date - (AbsoluteFromFrench(FrenchDate{year, month, 1}) - 1)
+	day := absoluteDate - (AbsoluteFromFrench(FrenchDate{year, month, 1}) - 1)
 	return FrenchDate{year, month, day}
 }
 
@@ -705,7 +705,6 @@ type OldHinduLunarDate struct {
 	Day       float64
 }
 
-/*
 // Old Hindu solar months
 const (
 	mesha     = 1
@@ -737,7 +736,7 @@ const (
 	magha      = 11
 	phalguna   = 12
 )
-*/
+
 var SolarSiderealYear = add(big.NewRat(365, 1), big.NewRat(279457, 1080000))
 var SolarMonth = div(SolarSiderealYear, big.NewRat(12, 1))
 var LunarSiderealMonth = add(big.NewRat(27, 1), big.NewRat(4644439, 14438334))
@@ -758,8 +757,8 @@ func Zodiac(t *big.Rat) (zodiac float64) {
 
 // OldHinduSolarFromAbsolute computes the Old Hindu solar date corresponding
 // to a given absolute (fixed) date.
-func OldHinduSolarFromAbsolute(date float64) OldHinduSolarDate {
-	hdate := add(big.NewRat(int64(date), 1), big.NewRat(1132959, 1), big.NewRat(1, 4))
+func OldHinduSolarFromAbsolute(absoluteDate float64) OldHinduSolarDate {
+	hdate := add(big.NewRat(int64(absoluteDate), 1), big.NewRat(1132959, 1), big.NewRat(1, 4))
 	year := quotient(hdate, SolarSiderealYear)
 	month := Zodiac(hdate)
 	day := floorf(modr(hdate, SolarMonth)) + 1
@@ -768,7 +767,7 @@ func OldHinduSolarFromAbsolute(date float64) OldHinduSolarDate {
 
 // AbsoluteFromOldHinduSolar returns the absolute (fixed) date from a given
 // Old Hindu solar date.
-func AbsoluteFromOldHinduSolar(d OldHinduSolarDate) (date float64) {
+func AbsoluteFromOldHinduSolar(d OldHinduSolarDate) (absoluteDate float64) {
 	year := big.NewRat(int64(d.Year), 1)
 	month := big.NewRat(int64(d.Month), 1)
 	day := big.NewRat(int64(d.Day), 1)
@@ -806,8 +805,8 @@ func NewMoon(t *big.Rat) *big.Rat {
 
 // OldHinduLunarFromAbsolute returnsthe Old Hindu lunar date corresponding to
 // a given absolute (fixed) date.
-func OldHinduLunarFromAbsolute(date float64) OldHinduLunarDate {
-	hdate := big.NewRat(int64(date+1132959), 1)
+func OldHinduLunarFromAbsolute(absoluteDate float64) OldHinduLunarDate {
+	hdate := big.NewRat(int64(absoluteDate+1132959), 1)
 	sunrise := add(hdate, big.NewRat(1, 4))
 	lastNewMoon := NewMoon(sunrise)
 	nextNewMoon := add(lastNewMoon, LunarSynodicMonth)
@@ -846,7 +845,7 @@ func OldHinduLunarPrecedes(d1, d2 OldHinduLunarDate) bool {
 
 // AbsoluteFromOldHinduLunar returns the absolute (fixed) date corresponding
 // to a given Old Hindu lunar date.
-func AbsoluteFromOldHinduLunar(d OldHinduLunarDate) (date float64) {
+func AbsoluteFromOldHinduLunar(d OldHinduLunarDate) (absoluteDate float64) {
 	years := d.Year
 	months := d.Month - 2
 	approx := floorf(mult(big.NewRat(int64(years), 1), SolarSiderealYear)) +

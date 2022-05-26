@@ -26,7 +26,7 @@ import (
 // and Old Hindu (solar, lunar) calendars.
 func main() {
 	// 1. set Gregorian date
-	gregorianDate := lc.GregorianDate{2022, 01, 06}
+	gregorianDate := lc.GregorianDate{Year: 2022, Month: 01, Day: 06}
 
 	// 2. convert Gregorian date to absolute (fixed) date
 	absoluteDate := lc.AbsoluteFromGregorian(gregorianDate)
@@ -45,7 +45,7 @@ func main() {
 	fmt.Println("Hindu Solar:\t\t", lc.OldHinduSolarFromAbsolute(absoluteDate))
 	fmt.Println("Hindu Lunar:\t\t", lc.OldHinduLunarFromAbsolute(absoluteDate))
 
-	// alternatively, using FromAbsolute
+	// Alternatively using FromAbsolute
 	fmt.Println("ISO:\t\t\t", lc.FromAbsolute(absoluteDate, "iso"))
 	fmt.Println("Mayan Long Count:\t", lc.FromAbsolute(absoluteDate, "mayanLongCount"))
 }

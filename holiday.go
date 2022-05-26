@@ -32,13 +32,13 @@ import "math"
 
 // IndependenceDay returns the absolute (fixed) date of the US
 // Independence Day.
-func IndependenceDay(year float64) (date float64) {
+func IndependenceDay(year float64) (absoluteDate float64) {
 	return AbsoluteFromGregorian(GregorianDate{year, july, 4})
 }
 
 // NthKDay computes the absolute (fixed) date of the nth kth day in a given
 // month in a given Gregorian year.
-func NthKDay(n float64, k float64, month float64, year float64) (date float64) {
+func NthKDay(n float64, k float64, month float64, year float64) (absoluteDate float64) {
 	if n > 0 {
 		return KDayOnOrBefore(
 			AbsoluteFromGregorian(GregorianDate{year, month, 7}), k) +
@@ -53,26 +53,26 @@ func NthKDay(n float64, k float64, month float64, year float64) (date float64) {
 
 // LaborDay returns the absolute (fixed) date of US Labor Day in a given
 // Gregorian year.
-func LaborDay(year float64) (date float64) {
+func LaborDay(year float64) (absoluteDate float64) {
 	return NthKDay(1, 1, september, year)
 }
 
 // MemorialDay returns the absolute (fixed) date of US Memorial Day in a
 // given Gregorian year.
-func MemorialDay(year float64) (date float64) {
+func MemorialDay(year float64) (absoluteDate float64) {
 	return NthKDay(-1, 1, may, year)
 }
 
 // DaylightSavingsStart returns the absolute (fixed) date of the start of US
 // daylight savings time.
-func DaylightSavingsStart(year float64) (date float64) {
+func DaylightSavingsStart(year float64) (absoluteDate float64) {
 	//return NthKDay(1, 0, april, year) // before 2007
 	return NthKDay(2, 0, march, year) // since 2007
 }
 
 // DaylightSavingsEnd returns the absolute (fixed) date of the end of US
 // daylight savings time.
-func DaylightSavingsEnd(year float64) (date float64) {
+func DaylightSavingsEnd(year float64) (absoluteDate float64) {
 	//return NthKDay(-1, 0, october, year) // before 2007
 	return NthKDay(1, 0, november, year) // since 2007
 }
@@ -81,50 +81,50 @@ func DaylightSavingsEnd(year float64) (date float64) {
 
 // Christmas returns the absolute (fixed) date of Gregorian Christmas in a
 // given Gregorian year.
-func Christmas(year float64) (date float64) {
+func Christmas(year float64) (absoluteDate float64) {
 	return AbsoluteFromGregorian(GregorianDate{year, december, 25})
 }
 
 // Advent returns the absolute (fixed) date of Advent in a given Gregorian year.
-func Advent(year float64) (date float64) {
+func Advent(year float64) (absoluteDate float64) {
 	return KDayOnOrBefore(
 		AbsoluteFromGregorian(GregorianDate{year, december, 3}), 0)
 }
 
 // Epiphany returns the absolute (fixed) date of Epiphany in a given
 // Gregorian year.
-func Epiphany(year float64) (date float64) {
+func Epiphany(year float64) (absoluteDate float64) {
 	return Christmas(year) + 12
 }
 
 // EasternOrthodoxChristmas returns the absolute (fixed) date of Eastern
 // Orthodox Christmas in a given Gregorian year.
-func EasternOrthodoxChristmas(year float64) (dates []float64) {
+func EasternOrthodoxChristmas(year float64) (absoluteDates []float64) {
 	jan_1 := AbsoluteFromGregorian(GregorianDate{year, january, 1})
 	dec_31 := AbsoluteFromGregorian(GregorianDate{year, december, 31})
 	y := JulianFromAbsolute(jan_1).Year
 	c_1 := AbsoluteFromJulian(JulianDate{y, december, 25})
 	c_2 := AbsoluteFromJulian(JulianDate{y + 1, december, 25})
-	dates = make([]float64, 0, 2)
+	absoluteDates = make([]float64, 0, 2)
 	if jan_1 <= c_1 && c_1 <= dec_31 {
-		dates = append(dates, c_1)
+		absoluteDates = append(absoluteDates, c_1)
 	}
 	if jan_1 <= c_2 && c_2 <= dec_31 {
-		dates = append(dates, c_2)
+		absoluteDates = append(absoluteDates, c_2)
 	}
-	return dates
+	return absoluteDates
 }
 
 // NicaeanRuleEaster computes the absolute (fixed) date of Easter in a given
 // Julian year.
-func NicaeanRuleEaster(year float64) (date float64) {
+func NicaeanRuleEaster(year float64) (absoluteDate float64) {
 	shiftedEpact := mod(14+(11*mod(year, 19)), 30)
 	paschalMoon := AbsoluteFromJulian(JulianDate{year, april, 19}) - shiftedEpact
 	return KDayOnOrBefore(paschalMoon+7, 0)
 }
 
 // Easter computes the absolute (fixed) date of Easter in a given Gregorian year.
-func Easter(year float64) (date float64) {
+func Easter(year float64) (absoluteDate float64) {
 	century := math.Floor(year/100) + 1
 	shiftedEpact := mod(14+
 		(11*mod(year, 19))-
@@ -143,7 +143,7 @@ func Easter(year float64) (date float64) {
 
 // Pentecost returns the absolute (fixed) date of Pentecost in a given
 // Gregorian year.
-func Pentecost(year float64) (date float64) {
+func Pentecost(year float64) (absoluteDate float64) {
 	return Easter(year) + 49
 }
 
@@ -151,29 +151,29 @@ func Pentecost(year float64) (date float64) {
 
 // IslamicDatesInGregorianYear returns a slice of absolute dates of a given
 // Islamic date (month, day) that occur in a given Gregorian year.
-func IslamicDatesInGregorianYear(month float64, day float64, year float64) (dates []float64) {
+func IslamicDatesInGregorianYear(month float64, day float64, year float64) (absoluteDates []float64) {
 	jan_1 := AbsoluteFromGregorian(GregorianDate{year, january, 1})
 	dec_31 := AbsoluteFromGregorian(GregorianDate{year, december, 31})
 	y := IslamicFromAbsolute(jan_1).Year
 	date_1 := AbsoluteFromIslamic(IslamicDate{y, month, day})
 	date_2 := AbsoluteFromIslamic(IslamicDate{y + 1, month, day})
 	date_3 := AbsoluteFromIslamic(IslamicDate{y + 2, month, day})
-	dates = make([]float64, 0, 3)
+	absoluteDates = make([]float64, 0, 3)
 	if jan_1 <= date_1 && date_1 <= dec_31 {
-		dates = append(dates, date_1)
+		absoluteDates = append(absoluteDates, date_1)
 	}
 	if jan_1 <= date_2 && date_2 <= dec_31 {
-		dates = append(dates, date_2)
+		absoluteDates = append(absoluteDates, date_2)
 	}
 	if jan_1 <= date_3 && date_3 <= dec_31 {
-		dates = append(dates, date_3)
+		absoluteDates = append(absoluteDates, date_3)
 	}
-	return dates
+	return absoluteDates
 }
 
 // MuladAlNabi computes slice of absolute (fixed) dates of Mulad al Nabi that
 // occur in a given Gregorian year.
-func MuladAlNabi(year float64) (dates []float64) {
+func MuladAlNabi(year float64) (absoluteDates []float64) {
 	return IslamicDatesInGregorianYear(rabi_i, 12, year)
 }
 
@@ -181,24 +181,24 @@ func MuladAlNabi(year float64) (dates []float64) {
 
 // YomKippur returns the absolute (fixed) date of Yom Kippur in a given
 // Gregorian year.
-func YomKippur(year float64) (date float64) {
+func YomKippur(year float64) (absoluteDate float64) {
 	return AbsoluteFromHebrew(HebrewDate{year + 3761, tishri, 10})
 }
 
 // Passover returns the abolute (fixed) date of Passover in a given Gregorian year.
-func Passover(year float64) (date float64) {
+func Passover(year float64) (absoluteDate float64) {
 	return AbsoluteFromHebrew(HebrewDate{year + 3760, nisan, 15})
 }
 
 // Purim returns the absolute (fixed) date of Purim in a given Gregorian year.
-func Purim(year float64) (date float64) {
+func Purim(year float64) (absoluteDate float64) {
 	return AbsoluteFromHebrew(
 		HebrewDate{year + 3760, LastMonthOfHebrewYear(year + 3760), 14})
 }
 
 // TaAnitEsther returns the absolute (fixed) date of TaAnitEsther in a given
 // Gregorian year.
-func TaAnitEsther(year float64) (date float64) {
+func TaAnitEsther(year float64) (absoluteDate float64) {
 	purimDate := Purim(year)
 	if mod(purimDate, 7) == 0 {
 		return purimDate - 3
@@ -209,7 +209,7 @@ func TaAnitEsther(year float64) (date float64) {
 
 // TishaBAv returns the absolute (fixed) date of Tisha B'Av in a given
 // Gregorian year.
-func TishaBAv(year float64) (date float64) {
+func TishaBAv(year float64) (absoluteDate float64) {
 	ninthOfAv := AbsoluteFromHebrew(HebrewDate{year + 3760, av, 9})
 	if mod(ninthOfAv, 7) == 6 {
 		return ninthOfAv + 1
@@ -220,7 +220,7 @@ func TishaBAv(year float64) (date float64) {
 
 // HebrewBirthday determines the absolute (fixed) date of the anniversary of a
 // given Hebrew birth date in a given Hebrew year.
-func HebrewBirthday(birthdate HebrewDate, year float64) (date float64) {
+func HebrewBirthday(birthdate HebrewDate, year float64) (absoluteDate float64) {
 	birthYear := birthdate.Year
 	birthMonth := birthdate.Month
 	birthDay := birthdate.Day
@@ -233,7 +233,7 @@ func HebrewBirthday(birthdate HebrewDate, year float64) (date float64) {
 
 // Yahrzeit determines the absolute (fixed) date of the anniversary of a given
 // Hebrew death-date in a given Hebrew year
-func Yahrzeit(deathDate HebrewDate, year float64) (date float64) {
+func Yahrzeit(deathDate HebrewDate, year float64) (absoluteDate float64) {
 	deathYear := deathDate.Year
 	deathMonth := deathDate.Month
 	deathDay := deathDate.Day

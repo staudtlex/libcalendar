@@ -91,7 +91,7 @@ func createGregorian(s []float64) GregorianDate {
 // createJulian takes a []float64{month, day, year} and returns
 // a JulianDate.
 func createJulian(s []float64) JulianDate {
-	return GregorianDate{
+	return JulianDate{
 		Year:  s[0],
 		Month: s[1],
 		Day:   s[2],
