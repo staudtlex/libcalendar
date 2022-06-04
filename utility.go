@@ -144,6 +144,32 @@ func keys[V any](x map[float64]V) []float64 {
 	return keys
 }
 
+// lastValidDate checks if the day provided in the parameters is valid
+// for a given year and month. If the day is valid, returns that day,
+// otherwise returns the last valid day of the given year and month.
+func LastValidDayOfMonth(year, month, day float64, calendar string) (validDay float64) {
+	lastValidDay := 0.0
+	switch calendar {
+	case "gregorian":
+		lastValidDay = LastDayOfGregorianMonth(month, year)
+	case "julian":
+		lastValidDay = LastDayOfJulianMonth(month, year)
+	case "islamic":
+		lastValidDay = LastDayOfIslamicMonth(month, year)
+	case "hebrew":
+		lastValidDay = LastDayOfHebrewMonth(month, year)
+	case "french":
+		lastValidDay = FrenchLastDayOfMonth(month, year)
+	default:
+		lastValidDay = day
+	}
+	if day < lastValidDay {
+		return day
+	} else {
+		return lastValidDay
+	}
+}
+
 // Date() creates a Date from its receiver.
 func (d GregorianDate) Date() Date {
 	return Date{

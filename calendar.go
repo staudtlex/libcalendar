@@ -293,20 +293,19 @@ func IslamicFromAbsolute(absoluteDate float64) IslamicDate {
 
 // Hebrew months
 const (
-	nisan        = 1
-	iyyar        = 2
-	sivan        = 3
-	tammuz       = 4
-	av           = 5
-	elul         = 6
-	tishri       = 7
-	heshvan      = 8
-	kislev       = 9
-	teveth       = 10
-	shevat       = 11
-	adar_i_leap  = 12 // only in leap years, otherwise adar_i_leap is skipped
-	adar_ii      = 12
-	adar_ii_leap = 13 // only in leap years, otherwise adar_i_leap is skipped
+	nisan   = 1
+	iyyar   = 2
+	sivan   = 3
+	tammuz  = 4
+	av      = 5
+	elul    = 6
+	tishri  = 7
+	heshvan = 8
+	kislev  = 9
+	teveth  = 10
+	shevat  = 11
+	adar    = 12 // only in leap years, otherwise adar is skipped
+	adar_ii = 13
 )
 
 // Hebrew date
