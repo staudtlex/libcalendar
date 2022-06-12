@@ -123,10 +123,10 @@ func (d Date) String() string {
 	}
 }
 
-// values returns the values of map[float64]V x as a slice of type V, sorted
+// values returns the values of map[float64]string x as a slice of type string, sorted
 // by the keys.
-func values[V any](x map[float64]V) []V {
-	values := make([]V, 0, len(x))
+func values(x map[float64]string) []string {
+	values := make([]string, 0, len(x))
 	for _, key := range keys(x) {
 		values = append(values, x[key])
 	}
@@ -134,8 +134,8 @@ func values[V any](x map[float64]V) []V {
 	return values
 }
 
-// keys returns the keys of map[float64]V x as a sorted slice of type float64.
-func keys[V any](x map[float64]V) []float64 {
+// keys returns the keys of map[float64]string x as a sorted slice of type float64.
+func keys(x map[float64]string) []float64 {
 	keys := make([]float64, 0, len(x))
 	for key := range x {
 		keys = append(keys, key)
