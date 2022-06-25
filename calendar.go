@@ -200,6 +200,8 @@ func AbsoluteFromJulian(d JulianDate) (absoluteDate float64) {
 		2
 }
 
+// JulianFromAbsolute computes the Julian date corresponding to a
+// given absolute date.
 func JulianFromAbsolute(absoluteDate float64) JulianDate {
 	approx := math.Floor((absoluteDate + 2) / 366)
 	f := func(float64) float64 { return 1 }
@@ -802,7 +804,7 @@ func NewMoon(t *big.Rat) *big.Rat {
 	return sub(t, modr(t, LunarSynodicMonth))
 }
 
-// OldHinduLunarFromAbsolute returnsthe Old Hindu lunar date corresponding to
+// OldHinduLunarFromAbsolute returns the Old Hindu lunar date corresponding to
 // a given absolute (fixed) date.
 func OldHinduLunarFromAbsolute(absoluteDate float64) OldHinduLunarDate {
 	hdate := big.NewRat(int64(absoluteDate+1132959), 1)
