@@ -16,7 +16,6 @@
 package libcalendar
 
 import (
-	"encoding/json"
 	"fmt"
 	"math"
 	"sort"
@@ -43,6 +42,7 @@ import (
 // Dershowitz, Nachum, and Edward Reingold. 1990. "Calendrical Calculations", Software - Practice and Experience, 20 (9), 899-928. https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.17.4274.
 //
 // Reingold, Edward, Nachum Dershowitz, and Stewart Clamen. 1993. "Calendrical Calculations, II: Three Historical Calendars", Software - Practice & Experience, 23 (4), 383-404. https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.9215.
+
 func FromAbsolute(absoluteDate float64, calendar string) string {
 	switch calendar {
 	case "gregorian":
@@ -83,10 +83,57 @@ type Date struct {
 	MonthNames     []string  `json:"monthNames"`     // e.g. []string{"January", ..., "December"}
 }
 
+// jsonFromNumSlice returns a JSON array from a slice of float64
+func jsonFromNumSlice(s []float64) string {
+	n := len(s)
+	switch {
+	case n == 1:
+		return fmt.Sprint(s[0])
+	case n > 1:
+		elems := fmt.Sprint(s[0])
+		for i := 1; i < n; i++ {
+			elems = elems + "," + fmt.Sprint(s[i])
+		}
+		return fmt.Sprintf("[%s]", elems)
+	default: // empty array, i.e. n == 0:
+		return "[]"
+	}
+}
+
+// jsonFromStringSlice returns a JSON array from a slice of strings
+func jsonFromStringSlice(s []string) string {
+	n := len(s)
+	switch {
+	case n == 1:
+		return fmt.Sprint(s[0])
+	case n > 1:
+		elems := fmt.Sprintf("\"%s\"", s[0])
+		for i := 1; i < n; i++ {
+			elems = elems + "," + fmt.Sprintf("\"%s\"", s[i])
+		}
+		return fmt.Sprintf("[%s]", elems)
+	default: // empty array, i.e. n == 0:
+		return "[]"
+	}
+}
+
 // Json serializes the receiver into a JSON-formatted string.
 func (d Date) Json() string {
-	jsond, _ := json.Marshal(d)
-	return string(jsond)
+	calendar :=
+		fmt.Sprintf("\"calendar\":\"%s\"", d.Calendar)
+	components :=
+		fmt.Sprintf("\"components\":%v", jsonFromNumSlice(d.Components))
+	componentNames :=
+		fmt.Sprintf("\"componentNames\":%v", jsonFromStringSlice(d.ComponentNames))
+	monthNames :=
+		fmt.Sprintf("\"monthNames\":%v", jsonFromStringSlice(d.MonthNames))
+	return fmt.Sprintf(
+		"{%s,%s,%s,%s}",
+		calendar,
+		components,
+		componentNames,
+		monthNames,
+	)
 }
 
 // String creates a string representation of its receiver.
@@ -475,13 +522,6 @@ func AbsoluteFromDate(d Date) (absoluteDate float64) {
 	default:
 		return math.NaN()
 	}
-}
-
-// JsonToDate unmarshals a JSON-string into a Date struct.
-func JsonToDate(s string) Date {
-	c := Date{}
-	json.Unmarshal([]byte(s), &c)
-	return (c)
 }
 
 // DateFromAbsolute converts a given absolute (fixed) date into the date
