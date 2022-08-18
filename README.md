@@ -20,7 +20,7 @@ import staudtlex.de/libcalendar
 ```
 
 ## Examples
-A basic example application is located in the `example` subdirectory, further examples may be added in the future.
+Basic examples can be found in `utility_test.go`, further examples may be added in the future.
 
 ## Limitations
 The primary motivation for writing _libcalendar_ was to take first steps in understanding calendar-related algorithms and Go programming. 

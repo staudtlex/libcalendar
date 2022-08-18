@@ -1,4 +1,4 @@
-// Copyright (C) 2021  Alexander Staudt
+// Copyright (C) 2022  Alexander Staudt
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-package main
+package libcalendar_test
 
 import (
 	"fmt"
@@ -21,12 +21,13 @@ import (
 	lc "staudtlex.de/libcalendar"
 )
 
-// convert from a Gregorian date to the corresponding date of the Julian, ISO,
+// Convert from a Gregorian date to the corresponding date of the Julian, ISO,
 // Islamic, Hebrew, French Revolutionary, Mayan (long count, haab, tzolkin),
 // and Old Hindu (solar, lunar) calendars.
-func main() {
+func Example() {
+	// Convert dates
 	// 1. set Gregorian date
-	gregorianDate := lc.GregorianDate{Year: 2022, Month: 01, Day: 06}
+	gregorianDate := lc.GregorianDate{Year: 2022, Month: 06, Day: 15}
 
 	// 2. convert Gregorian date to absolute (fixed) date
 	absoluteDate := lc.AbsoluteFromGregorian(gregorianDate)
@@ -46,7 +47,26 @@ func main() {
 	fmt.Println("Hindu Solar:\t\t", lc.OldHinduSolarFromAbsolute(absoluteDate))
 	fmt.Println("Hindu Lunar:\t\t", lc.OldHinduLunarFromAbsolute(absoluteDate))
 
-	// Alternatively using FromAbsolute
-	fmt.Println("ISO:\t\t\t", lc.FromAbsolute(absoluteDate, "iso"))
-	fmt.Println("Mayan Long Count:\t", lc.FromAbsolute(absoluteDate, "mayanLongCount"))
+	// Utility functions
+	// 1. Marshal a Date to JSON:
+	gregorian_json := gregorianDate.Date().Json()
+	fmt.Println(gregorian_json)
+
+	// 2. Unmarshal JSON into a Date
+	json_1 := `{
+		"components": [2022,6,15],
+		"calendar": "gregorian",
+		"componentNames" :[],
+		"monthNames": []
+	}`
+	fmt.Println(json_1)
+	unmarshal_json_1 := lc.JsonToDate(json_1)
+	fmt.Println(unmarshal_json_1)
+
+	// 3. Convert a Date to an absolute date, and compute a Mayan Long count
+	// date from that absolute date
+	mayanLongCount :=
+		lc.FromAbsolute(
+			lc.AbsoluteFromDate(unmarshal_json_1), "mayanLongCount")
+	fmt.Println("Mayan long count: ", mayanLongCount)
 }
