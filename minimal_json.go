@@ -37,6 +37,8 @@ const (
 
 	// Literals
 	NAME_OR_STRING
+	CALENDAR
+	COMPONENTS
 	ARRAY
 	DIGITS
 
@@ -169,7 +171,15 @@ func (s *Scanner) scanName() (tok token, str string) {
 			_, _ = buf.WriteRune(ch)
 		}
 	}
-	return NAME_OR_STRING, strings.ReplaceAll(buf.String(), "\"", "")
+	nameOrString := strings.ReplaceAll(buf.String(), "\"", "")
+	switch nameOrString {
+	case "calendar":
+		return CALENDAR, nameOrString
+	case "components":
+		return COMPONENTS, nameOrString
+	default:
+		return NAME_OR_STRING, nameOrString
+	}
 }
 
 // Scan returns the next token and literal value.
@@ -202,17 +212,22 @@ func (s *Scanner) Scan() (tok token, str string) {
 	return ILLEGAL, string(ch)
 }
 
+type tokenString struct {
+	token
+	string
+}
+
 // tokenize tokenizes a string and returns all elements representing either a
 // JSON key, string value, or array.
-func tokenize(s string) []string {
+func tokenize(s string) []tokenString {
 	scan := NewScanner(strings.NewReader(s))
-	tokenStrings := []string{}
+	tokens := []tokenString{}
 	for tok, str := scan.Scan(); tok != EOF; tok, str = scan.Scan() {
-		if tok == NAME_OR_STRING || tok == ARRAY {
-			tokenStrings = append(tokenStrings, str)
+		if tok == NAME_OR_STRING || tok == CALENDAR || tok == COMPONENTS || tok == ARRAY {
+			tokens = append(tokens, tokenString{tok, str})
 		}
 	}
-	return tokenStrings
+	return tokens
 }
 
 // parseNumArray parses a string representing a JSON array of numeric values
@@ -229,26 +244,46 @@ func parseNumArray(s string) []float64 {
 	return array
 }
 
-// parseNumArray parses a string representing a JSON array of string values
-// and returns a slice of strings.
-func parseStringArray(s string) []string {
-	scan := NewScanner(strings.NewReader(s))
-	array := []string{}
-	for tok, str := scan.Scan(); tok != EOF; tok, str = scan.Scan() {
-		if tok == NAME_OR_STRING {
-			array = append(array, str)
-		}
+// isValidCalendar returns true if the given string matches the name of a
+// supported calendar, and false otherwise.
+func isValidCalendar(calendar string) bool {
+	switch calendar {
+	case "gregorian",
+		"julian",
+		"iso",
+		"islamic",
+		"hebrew",
+		"mayanLongCount",
+		"mayanHaab",
+		"mayanTzolkin",
+		"french",
+		"oldHinduSolar",
+		"oldHinduLunar":
+		return true
+	default:
+		return false
 	}
-	return array
 }
 
-// JsonToDate unmarshals a JSON-string into a Date struct.
+// JsonToDate unmarshals a JSON-serialized Date object into a Date struct.
+// Unmarshals only elements "calendar" and "components".
 func JsonToDate(json string) Date {
-	data := tokenize(json)
+	tokens := tokenize(json)
+	data := map[token]string{}
+	for i := 0; i < len(tokens); i++ {
+		switch {
+		case tokens[i].token == CALENDAR:
+			if isValidCalendar(tokens[i+1].string) {
+				data[tokens[i].token] = tokens[i+1].string
+			} else {
+				data[tokens[i].token] = ""
+			}
+		case tokens[i].token == COMPONENTS:
+			data[tokens[i].token] = tokens[i+1].string
+		}
+	}
 	return Date{
-		Calendar:       data[1],
-		Components:     parseNumArray(data[3]),
-		ComponentNames: parseStringArray(data[5]),
-		MonthNames:     parseStringArray(data[7]),
+		Calendar:   data[CALENDAR],
+		Components: parseNumArray(data[COMPONENTS]),
 	}
 }

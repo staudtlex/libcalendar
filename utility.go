@@ -43,6 +43,8 @@ import (
 //
 // Reingold, Edward, Nachum Dershowitz, and Stewart Clamen. 1993. "Calendrical Calculations, II: Three Historical Calendars", Software - Practice & Experience, 23 (4), 383-404. https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.9215.
 
+// FromAbsolute returns a string-formatted calendar date from a given absolute
+// date and calendar name.
 func FromAbsolute(absoluteDate float64, calendar string) string {
 	switch calendar {
 	case "gregorian":
@@ -122,11 +124,11 @@ func (d Date) Json() string {
 	calendar :=
 		fmt.Sprintf("\"calendar\":\"%s\"", d.Calendar)
 	components :=
-		fmt.Sprintf("\"components\":%v", jsonFromNumSlice(d.Components))
+		fmt.Sprintf("\"components\":%s", jsonFromNumSlice(d.Components))
 	componentNames :=
-		fmt.Sprintf("\"componentNames\":%v", jsonFromStringSlice(d.ComponentNames))
+		fmt.Sprintf("\"componentNames\":%s", jsonFromStringSlice(d.ComponentNames))
 	monthNames :=
-		fmt.Sprintf("\"monthNames\":%v", jsonFromStringSlice(d.MonthNames))
+		fmt.Sprintf("\"monthNames\":%s", jsonFromStringSlice(d.MonthNames))
 	return fmt.Sprintf(
 		"{%s,%s,%s,%s}",
 		calendar,
@@ -405,6 +407,7 @@ func (d OldHinduLunarDate) Date() Date {
 	}
 }
 
+// gregorianFromDate computes a GregorianDate from a given libcalendar Date.
 func gregorianFromDate(d Date) GregorianDate {
 	return GregorianDate{
 		Year:  d.Components[0],
@@ -413,6 +416,7 @@ func gregorianFromDate(d Date) GregorianDate {
 	}
 }
 
+// julianFromDate computes a JulianDate from a given libcalendar Date.
 func julianFromDate(d Date) JulianDate {
 	return JulianDate{
 		Year:  d.Components[0],
@@ -421,6 +425,7 @@ func julianFromDate(d Date) JulianDate {
 	}
 }
 
+// isoFromDate computes a IsoDate from a given libcalendar Date.
 func isoFromDate(d Date) IsoDate {
 	return IsoDate{
 		Year: d.Components[0],
@@ -429,6 +434,7 @@ func isoFromDate(d Date) IsoDate {
 	}
 }
 
+// islamicFromDate computes a IslamicDate from a given libcalendar Date.
 func islamicFromDate(d Date) IslamicDate {
 	return IslamicDate{
 		Year:  d.Components[0],
@@ -437,6 +443,7 @@ func islamicFromDate(d Date) IslamicDate {
 	}
 }
 
+// hebrewFromDate computes a HebrewDate from a given libcalendar Date.
 func hebrewFromDate(d Date) HebrewDate {
 	return HebrewDate{
 		Year:  d.Components[0],
@@ -445,6 +452,8 @@ func hebrewFromDate(d Date) HebrewDate {
 	}
 }
 
+// mayanLongCountFromDate computes a MayanLongCount from a given
+// libcalendar Date.
 func mayanLongCountFromDate(d Date) MayanLongCount {
 	return MayanLongCount{
 		Baktun: d.Components[0],
@@ -455,6 +464,7 @@ func mayanLongCountFromDate(d Date) MayanLongCount {
 	}
 }
 
+// mayanHaabFromDate computes a MayanHaabDate from a given libcalendar Date.
 func mayanHaabFromDate(d Date) MayanHaabDate {
 	return MayanHaabDate{
 		Day:   d.Components[0],
@@ -462,6 +472,8 @@ func mayanHaabFromDate(d Date) MayanHaabDate {
 	}
 }
 
+// mayanTzolkinFromDate computes a MayanTzolkinDate from a given
+// libcalendar Date.
 func mayanTzolkinFromDate(d Date) MayanTzolkinDate {
 	return MayanTzolkinDate{
 		Number: d.Components[0],
@@ -469,6 +481,7 @@ func mayanTzolkinFromDate(d Date) MayanTzolkinDate {
 	}
 }
 
+// frenchFromDate computes a FrenchDate from a given libcalendar Date.
 func frenchFromDate(d Date) FrenchDate {
 	return FrenchDate{
 		Year:  d.Components[0],
@@ -477,6 +490,8 @@ func frenchFromDate(d Date) FrenchDate {
 	}
 }
 
+// oldHinduSolarFromDate computes a OldHinduSolarDate from a given
+// libcalendar Date.
 func oldHinduSolarFromDate(d Date) OldHinduSolarDate {
 	return OldHinduSolarDate{
 		Year:  d.Components[0],
@@ -485,6 +500,8 @@ func oldHinduSolarFromDate(d Date) OldHinduSolarDate {
 	}
 }
 
+// oldHinduLunarFromDate computes a OldHinduLunarDate from a given
+// libcalendar Date.
 func oldHinduLunarFromDate(d Date) OldHinduLunarDate {
 	return OldHinduLunarDate{
 		Year:  d.Components[0],

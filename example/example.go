@@ -34,6 +34,7 @@ func main() {
 	// 3. convert absolute dates into corresponding calendar dates
 	fmt.Println("Converting from a Gregorian date to other calendar dates")
 	fmt.Println("Gregorian:\t\t", gregorianDate)
+	fmt.Println("Absolute date:\t\t", absoluteDate)
 	fmt.Println("Julian:\t\t\t", lc.JulianFromAbsolute(absoluteDate))
 	fmt.Println("ISO:\t\t\t", lc.IsoFromAbsolute(absoluteDate))
 	fmt.Println("Islamic:\t\t", lc.IslamicFromAbsolute(absoluteDate))
