@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-// This file implements a basic JSON parser sufficient to unmarshal
+// This file implements a minimal JSON parser sufficient to unmarshal
 // JSON-serialized Date objects
 
 package libcalendar
