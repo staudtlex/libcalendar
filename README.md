@@ -4,18 +4,21 @@
 _libcalendar_ is a translation into Go of the Lisp code described and presented in: 
 
 - [Dershowitz, Nachum, and Edward Reingold. 1990. "Calendrical Calculations", Software - Practice and Experience, 20 (9), 899-928.](https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.17.4274)
+
 - [Reingold, Edward, Nachum Dershowitz, and Stewart Clamen. 1993. "Calendrical Calculations, II: Three Historical Calendars", Software - Practice & Experience, 23 (4), 383-404.](https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.13.9215) The Lisp source code can be found at https://www.cs.tau.ac.il/~nachum/calendar-book/papers/.
 
 _libcalendar_ allows the computation of and conversion between dates from 11 calendars: Gregorian, ISO, Julian, Islamic, Hebrew, Mayan (long count, haab, tzolkin), French Revolutionary, and Old Hindu (solar, lunar).
 
 ## Installing
 Install the latest version of _libcalendar_ via `go get`
-```go
+
+```sh
 go get staudtlex.de/libcalendar
 ```
 
 Import _libcalendar_ in your application
-```go
+
+```sh
 import staudtlex.de/libcalendar
 ```
 
